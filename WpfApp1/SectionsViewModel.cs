@@ -2,12 +2,13 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
 
 namespace WpfApp1.VM
 {
-    public class QuestionsViewModel : INotifyPropertyChanged
+    public class SectionsViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<Section> _sections;
 
@@ -22,7 +23,7 @@ namespace WpfApp1.VM
         }
 
 
-        public QuestionsViewModel()
+        public SectionsViewModel()
         {
             LoadFileSystem();
         }
@@ -118,7 +119,7 @@ namespace WpfApp1.VM
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -130,14 +131,44 @@ namespace WpfApp1.VM
             {
                 if (_addSectionCommand == null)
                 {
-                    _addSectionCommand = new RelayCommand(AddSection);
+                    _addSectionCommand = new RelayCommand(ShowDialogAddSection);
                 }
                 return _addSectionCommand;
             }
         }
-        private void AddSection( )
+
+        private ICommand _refreshCommand;
+        public ICommand RefreshCommand
         {
-            
+            get
+            {
+                if (_refreshCommand == null)
+                {
+                    _refreshCommand = new RelayCommand(DoRefreshCommand);
+                }
+                return _refreshCommand;
+            }
+        }
+
+        AddSectionViewModel avm;
+
+        private void ShowDialogAddSection( )
+        {
+            var dialog = new AddSectionWindow();
+            avm = new AddSectionViewModel(result =>
+            {
+                Sections.Add(new Section() { Name2 = avm.SectionName });
+                dialog.Close();
+            });
+
+            dialog.DataContext = avm;
+            dialog.Owner = Application.Current.MainWindow;
+            dialog.ShowDialog();
+        }
+
+        private void DoRefreshCommand()
+        {
+
         }
     }
 
@@ -147,7 +178,7 @@ namespace WpfApp1.VM
         public string Name2 { get; set; }
         public List<Question> Questions { get; set; }
 
-        public int QuestionsCounter => Questions.Count;
+        public int QuestionsCounter => Questions is null ? Questions.Count : 0;
     }
 
     public class Question
@@ -155,5 +186,7 @@ namespace WpfApp1.VM
         public string Id { get; set; }
         public string Text2 { get; set; }
         public List<string> AvAns { get; set; }
+
+        public ICommand OkCommand { get; }
     }
 }

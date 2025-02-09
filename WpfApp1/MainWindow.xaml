@@ -6,27 +6,31 @@
         xmlns:local="clr-namespace:WpfApp1"
         xmlns:localvm="clr-namespace:WpfApp1.VM"
         mc:Ignorable="d"
-        Title="Questionnaire" Height="480" Width="640">
+        Title="Questionnaire" Height="480" Width="640"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <localvm:QuestionsViewModel />
+        <localvm:SectionsViewModel />
     </Window.DataContext>
     <Window.Resources>
 
         <DataTemplate x:Key="AnswerTemplate">
             <StackPanel Margin="10,5,0,0" Orientation="Vertical">
-                <RadioButton Content="{Binding}"  Margin="20,5,0,0"/>
+                <DockPanel>
+                    <RadioButton Content="{Binding}"  Margin="20,5,0,0"/>
+                    <Button x:Name="btnDelAnswer" Command="{Binding DelAnswerCommand}">
+                        <TextBlock Text="Del answer"></TextBlock>
+                    </Button>
+                </DockPanel>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="QuestionTemplate" DataType="{x:Type localvm:Question}">
             <StackPanel Margin="20,25,0,0" Orientation="Vertical">
                 <TextBlock Text="{Binding Text2}" FontSize="14"/>
-                <Button x:Name="btnAddAnswer" Command="{Binding NavigationHelper.AddAnswerCommand, ElementName=pageRoot}">
+                <Button x:Name="btnAddAnswer" Command="{Binding AddAnswerCommand }">
                     <TextBlock Text="Add answer"></TextBlock>
                 </Button>
-                <Button x:Name="btnDelAnswer" Command="{Binding NavigationHelper.DelAnswerCommand, ElementName=pageRoot}">
-                    <TextBlock Text="Add answer"></TextBlock>
-                </Button>
+                <ItemsControl ItemsSource="{Binding Path=AvAns}" ItemTemplate="{StaticResource AnswerTemplate}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -47,7 +51,7 @@
     </Window.Resources>
 
     <StackPanel Orientation="Vertical">
-        <Button x:Name="btnRefresh" Grid.Row="0" Margin="10,10,10,0" Command="{Binding NavigationHelper.RefreshCommand, ElementName=pageRoot}">
+        <Button x:Name="btnRefresh" Grid.Row="0" Margin="10,10,10,0" Command="{Binding RefreshCommand}">
             <Button.Content>
                 <TextBlock Text="Refresh"></TextBlock>
             </Button.Content>
@@ -59,7 +63,9 @@
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button x:Name="btnAddSection" Grid.Row="0" Margin="10,10,10,0" Command="{Binding NavigationHelper.AddSectionCommand, ElementName=pageRoot}" />
+                    <Button x:Name="btnAddSection" Grid.Row="0" Margin="10,10,10,0" Command="{Binding AddSectionCommand}">
+                        <TextBlock Text="Add Section"></TextBlock>
+                    </Button>
                     <ListView  ItemsSource="{Binding Sections}" ItemTemplate="{StaticResource ResourceKey=SectionTemplate}" Margin="10 10 10 10" Grid.Row="1">
                     </ListView>
                 </Grid>
