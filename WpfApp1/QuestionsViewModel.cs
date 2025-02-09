@@ -146,6 +146,8 @@ namespace WpfApp1.VM
         public string Id { get; set; }
         public string Name2 { get; set; }
         public List<Question> Questions { get; set; }
+
+        public int QuestionsCounter => Questions.Count;
     }
 
     public class Question
