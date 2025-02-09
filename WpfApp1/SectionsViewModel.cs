@@ -178,7 +178,7 @@ namespace WpfApp1.VM
         public string Name2 { get; set; }
         public List<Question> Questions { get; set; }
 
-        public int QuestionsCounter => Questions is null ? Questions.Count : 0;
+        public int QuestionsCounter => Questions is null ? 0 : Questions.Count;
     }
 
     public class Question

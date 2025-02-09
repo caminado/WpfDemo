@@ -16,7 +16,7 @@
         <DataTemplate x:Key="AnswerTemplate">
             <StackPanel Margin="10,5,0,0" Orientation="Vertical">
                 <DockPanel>
-                    <RadioButton Content="{Binding}"  Margin="20,5,0,0"/>
+                    <RadioButton Content="{Binding}" GroupName="{Binding DataContext.Text2, RelativeSource={RelativeSource AncestorType=ItemsControl}}" Margin="20,5,0,0"/>
                     <Button x:Name="btnDelAnswer" Command="{Binding DelAnswerCommand}">
                         <TextBlock Text="Del answer"></TextBlock>
                     </Button>
